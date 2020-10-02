@@ -2,6 +2,10 @@ from typing import *
 from functools import total_ordering
 
 
+def is_number(a):
+    return isinstance(num, (int, float)
+
+
 @total_ordering
 class UnitValue(SupportsFloat, SupportsInt):
     def __init__(self, value: float, up: Sequence[str], down: Sequence[str]=None):
@@ -57,7 +61,17 @@ class UnitValue(SupportsFloat, SupportsInt):
             0
             >>> len(v3.down)
             0
+            >>> scalar = 4
+            >>> v4 = v3 / scalar
+            >>> v4.value == v3.value / scalar
+            True
+            >>> v4.up == v3.up
+            True
+            >>> v4.down == v3.down
+            True
         """
+        if is_number(other):
+            return UnitValue(self.value / other, self.up, self.down)
         return UnitValue(self.value / other.value, self.up + other.down, self.down + other.up)
 
     def __mul__(self, other):
@@ -78,7 +92,17 @@ class UnitValue(SupportsFloat, SupportsInt):
             2
             >>> len(v3.down)
             0
+            >>> scalar = 4
+            >>> v4 = v3 * scalar
+            >>> v4.value == v3.value * scalar
+            True
+            >>> v4.up == v3.up
+            True
+            >>> v4.down == v3.down
+            True
         """
+        if is_number(other):
+            return UnitValue(self.value * other, self.up, self.down)
         return UnitValue(self.value * other.value, self.up + other.up, self.down + other.down)
 
     def __add__(self, other):
