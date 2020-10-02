@@ -1,17 +1,11 @@
+import pytest
+
 from pyphysics  import *
 
 
-class Time(Unit):
-    pass
-
-
-class Length(Unit):
-    pass
-
-
 def test_truediv_different():
-    Meter = Length("m")
-    Second = Time("sec")
+    Meter = Unit("m")
+    Second = Unit("sec")
     v1 = Meter(2)
     v2 = Second(3)
     v3 = v1 / v2
@@ -23,7 +17,7 @@ def test_truediv_different():
 
 
 def test_truediv_same():
-    Meter = Length("m")
+    Meter = Unit("m")
     v1 = Meter(2)
     v3 = v1 / v1
     assert v3.value == 1
@@ -32,8 +26,8 @@ def test_truediv_same():
 
 
 def test_truediv_partially():
-    Meter = Length("m")
-    Second = Time("sec")
+    Meter = Unit("m")
+    Second = Unit("sec")
     v1 = Meter(2)
     v2 = Second(3)
     v3 = v1 / (v2 * v2)
@@ -43,8 +37,8 @@ def test_truediv_partially():
 
 
 def test_mul():
-    Meter = Length("m")
-    Second = Time("sec")
+    Meter = Unit("m")
+    Second = Unit("sec")
     v1 = Meter(2)
     v2 = Second(3)
     v3 = v1 * v2
@@ -56,8 +50,8 @@ def test_mul():
 
 
 def test_mul_than_div():
-    Meter = Length("m")
-    Second = Time("sec")
+    Meter = Unit("m")
+    Second = Unit("sec")
     v1 = Meter(2)
     v2 = Second(3)
     v3 = v1 / (v2 * v2)
@@ -69,8 +63,8 @@ def test_mul_than_div():
 
 
 def test_div_than_mul():
-    Meter = Length("m")
-    Second = Time("sec")
+    Meter = Unit("m")
+    Second = Unit("sec")
     v1 = Meter(2)
     v2 = Second(3)
     v3 = v1 / v2 * v1
@@ -82,29 +76,25 @@ def test_div_than_mul():
 
 
 def test_add_only_same_type():
-    Meter = Length("m")
-    Second = Time("sec")
+    Meter = Unit("m")
+    Second = Unit("sec")
     v1 = Meter(2)
     v2 = Second(3)
-    try:
+    with pytest.raises(TypeError):
         v1 + v2
-    except TypeError:
-        pass
 
 
 def test_sub_only_same_type():
-    Meter = Length("m")
-    Second = Time("sec")
+    Meter = Unit("m")
+    Second = Unit("sec")
     v1 = Meter(2)
     v2 = Second(3)
-    try:
+    with pytest.raises(TypeError):
         v1 - v2
-    except TypeError:
-        pass
 
 
 def test_add():
-    Meter = Length("m")
+    Meter = Unit("m")
     v1 = Meter(2)
     v2 = v1 + v1
     assert v2.value == v1.value + v1.value
@@ -113,7 +103,7 @@ def test_add():
 
 
 def test_sub():
-    Meter = Length("m")
+    Meter = Unit("m")
     v1 = Meter(2)
     v2 = v1 - v1
     assert v2.value == 0
@@ -122,8 +112,8 @@ def test_sub():
 
 
 def test_replace_unit_fully():
-    Meter = Length("m")
-    Second = Time("sec")
+    Meter = Unit("m")
+    Second = Unit("sec")
     Newton = Composite("N", [Meter], [Second, Second])
     v1 = Meter(2)
     v2 = Second(3)
@@ -138,8 +128,8 @@ def test_replace_unit_fully():
 
 
 def test_replace_unit_partial():
-    Meter = Length("m")
-    Second = Time("sec")
+    Meter = Unit("m")
+    Second = Unit("sec")
     Newton = Composite("N", [Meter], [Second, Second])
     v1 = Meter(2)
     v2 = Second(3)
