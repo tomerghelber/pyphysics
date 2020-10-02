@@ -51,7 +51,7 @@ class UnitValue(SupportsFloat, SupportsInt, SupportsAbs, SupportsRound):
         if power is None:
             up_counting = [self.up.count(elem) // count for elem, count in Counter(unit.up).items()]
             down_counting = [self.down.count(elem) // count for elem, count in Counter(unit.down).items()]
-            power = max(up_counting + down_counting, abs)
+            power = max(up_counting + down_counting, key=abs)
 
         if power > 0:
             new_up = self.up + (unit.down + [unit]) * power
