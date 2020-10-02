@@ -54,11 +54,11 @@ class UnitValue(SupportsFloat, SupportsInt, SupportsAbs, SupportsRound):
             power = max(up_counting + down_counting, key=abs)
 
         if power > 0:
-            new_up = ([unit] + unit.down) * power + self.up
-            new_down = list(self.down) + unit.up * power
+            new_up = self.up + ((unit,) + unit.down) * power
+            new_down = self.down + unit.up * power
         else:
-            new_up += list(self.down) + unit.up * power
-            new_down += ([unit] + unit.down) * power + self.up
+            new_up = self.up + unit.up * power
+            new_down = self.down + ((unit,) + unit.down) * power
 
         return UnitValue(self.value, new_up, new_down)
 
