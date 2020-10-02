@@ -145,18 +145,3 @@ def test_replace_unit_partial():
     assert Meter not in v4.down
     assert 2 == len(v4.up)
     assert 0 == len(v4.down)
-
-
-
-test_truediv_different()
-test_truediv_same()
-test_truediv_partially()
-test_mul()
-test_mul_than_div()
-test_div_than_mul()
-test_add_only_same_type()
-test_sub_only_same_type()
-test_add()
-test_sub()
-test_replace_unit_fully()
-test_replace_unit_partial()
