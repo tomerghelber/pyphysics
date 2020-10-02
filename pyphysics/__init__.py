@@ -40,11 +40,23 @@ class UnitValue(SupportsFloat, SupportsInt):
             >>> v1 = Meter(2)
             >>> v2 = Second(3)
             >>> v3 = v1 / v2
-            >>> assert v3.value == v1.value / v2.value
-            >>> assert Meter in v3.up
-            >>> assert Second in v3.down
-            >>> assert 1 == len(v3.up)
-            >>> assert 1 == len(v3.down)
+            >>> v3.value == v1.value / v2.value
+            True
+            >>> Meter in v3.up
+            True
+            >>> Second in v3.down
+            True
+            >>> len(v3.up)
+            1
+            >>> len(v3.down)
+            1
+            >>> v3 = v1 / v1
+            >>> v3.value
+            1
+            >>> len(v3.up)
+            0
+            >>> len(v3.down)
+            0
         """
         return UnitValue(self.value / other.value, self.up + other.down, self.down + other.up)
 
