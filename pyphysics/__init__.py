@@ -52,7 +52,7 @@ class UnitValue(SupportsFloat, SupportsInt):
             1
             >>> v3 = v1 / v1
             >>> v3.value
-            1
+            1.0
             >>> len(v3.up)
             0
             >>> len(v3.down)
@@ -68,11 +68,16 @@ class UnitValue(SupportsFloat, SupportsInt):
             >>> v1 = Meter(2)
             >>> v2 = Second(3)
             >>> v3 = v1 * v2
-            >>> assert v3.value == v1.value * v2.value
-            >>> assert Meter in v3.up
-            >>> assert Second in v3.up
-            >>> assert 2 == len(v3.up)
-            >>> assert not v3.down
+            >>> v3.value == v1.value * v2.value
+            True
+            >>> Meter in v3.up
+            True
+            >>> Second in v3.up
+            True
+            >>> len(v3.up)
+            2
+            >>> len(v3.down)
+            0
         """
         return UnitValue(self.value * other.value, self.up + other.up, self.down + other.down)
 
@@ -82,9 +87,12 @@ class UnitValue(SupportsFloat, SupportsInt):
             >>> Meter = Unit("m")
             >>> v1 = Meter(2)
             >>> v2 = v1 + v1
-            >>> assert v2.value == v1.value + v1.value
-            >>> assert v2.up == v1.up
-            >>> assert v2.down == v1.down
+            >>> v2.value == v1.value + v1.value
+            True
+            >>> v2.up == v1.up
+            True
+            >>> v2.down == v1.down
+            True
         """
         if not self.__same_type(other):
             raise TypeError("Not the same type")
@@ -96,9 +104,12 @@ class UnitValue(SupportsFloat, SupportsInt):
             >>> Meter = Unit("m")
             >>> v1 = Meter(2)
             >>> v2 = v1 - v1
-            >>> assert v2.value == 0
-            >>> assert v2.up == v1.up
-            >>> assert v2.down == v1.down
+            >>> v2.value
+            0.0
+            >>> v2.up == v1.up
+            True
+            >>> v2.down == v1.down
+            True
         """
         if not self.__same_type(other):
             raise TypeError("Not the same type")
