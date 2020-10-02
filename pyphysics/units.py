@@ -33,11 +33,11 @@ class UnitValue(SupportsFloat, SupportsInt, SupportsAbs, SupportsRound):
         """
         new_up = list(self.up)
         new_down = list(self.down)
-        for _ in range(new_up.count(unit)):
+        for _ in range(power or new_up.count(unit)):
             new_up.remove(unit)
             new_up += unit.up
             new_down += unit.down
-        for _ in range(new_down.count(unit)):
+        for _ in range(power or new_down.count(unit)):
             new_down.remove(unit)
             new_down += unit.up
             new_up += unit.down
@@ -51,7 +51,10 @@ class UnitValue(SupportsFloat, SupportsInt, SupportsAbs, SupportsRound):
         new_up = Counter(self.up)
         new_down = Counter(self.down)
 
-        max_replace = max([new_up.count(elem) / count for elem, count in Counter(unit.up)] + [new_down.count(elem) / count for elem, count in Counter(unit.down)])
+        if power is None:
+            max_replace = max([new_up.count(elem) / count for elem, count in Counter(unit.up)] + [new_down.count(elem) / count for elem, count in Counter(unit.down)])
+        else:
+            max_replace = power
         new_up += unit.down * max_replace
         new_down += unit.up * max_replace
 
