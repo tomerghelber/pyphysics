@@ -48,11 +48,11 @@ class UnitValue(SupportsFloat, SupportsInt, SupportsAbs, SupportsRound):
         Args:
             power: If exists, replace unit with the power.
         """
-        new_up = Counter(self.up)
-        new_down = Counter(self.down)
+        new_up = list(self.up)
+        new_down = list(self.down)
 
         if power is None:
-            max_replace = max([new_up.count(elem) / count for elem, count in Counter(unit.up)] + [new_down.count(elem) / count for elem, count in Counter(unit.down)])
+            max_replace = max([new_up.count(elem) / count for elem, count in Counter(unit.up).item()] + [new_down.count(elem) / count for elem, count in Counter(unit.down).item()])
         else:
             max_replace = power
         new_up += unit.down * max_replace
