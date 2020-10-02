@@ -79,6 +79,15 @@ class UnitValue(SupportsFloat, SupportsInt):
         return UnitValue(self.value + other.value, self.up, self.down)
 
     def __sub__(self, other):
+        """
+        Examples:
+            >>> Meter = Unit("m")
+            >>> v1 = Meter(2)
+            >>> v2 = v1 - v1
+            >>> assert v2.value == 0
+            >>> assert v2.up == v1.up
+            >>> assert v2.down == v1.down
+        """
         if not self.__same_type(other):
             raise TypeError("Not the same type")
         return UnitValue(self.value - other.value, self.up, self.down)
