@@ -11,7 +11,7 @@ class UnitValue(SupportsFloat, SupportsInt, SupportsAbs, SupportsRound):
     """Wrapper of float to has physics units as part of its type.
     """
 
-    def __init__(self, value: float, up: Sequence[str], down: Sequence[str]=None):
+    def __init__(self, value: float, up: Sequence['Unit'], down: Sequence['Unit']=None):
         self.value = float(value)
         up = list(sorted(up))
         down = list(sorted(down)) if down else []
