@@ -23,8 +23,8 @@ class UnitValue(SupportsFloat, SupportsInt, SupportsAbs, SupportsRound):
                 down.remove(current)
             else:
                 i += 1
-        self.up = tuple(self.up)
-        self.down = tuple(self.down)
+        self.up = tuple(up)
+        self.down = tuple(down)
 
     def replace_unit(self, unit: 'Composite', power: Optional[int]=None):
         """
