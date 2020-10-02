@@ -3,19 +3,6 @@ import pytest
 from pyphysics  import *
 
 
-def test_truediv_different():
-    Meter = Unit("m")
-    Second = Unit("sec")
-    v1 = Meter(2)
-    v2 = Second(3)
-    v3 = v1 / v2
-    assert v3.value == v1.value / v2.value
-    assert Meter in v3.up
-    assert Second in v3.down
-    assert 1 == len(v3.up)
-    assert 1 == len(v3.down)
-
-
 def test_truediv_same():
     Meter = Unit("m")
     v1 = Meter(2)
@@ -34,19 +21,6 @@ def test_truediv_partially():
     assert v3.value == v1.value / (v2.value * v2.value)
     assert 1 == len(v3.up)
     assert 2 == len(v3.down)
-
-
-def test_mul():
-    Meter = Unit("m")
-    Second = Unit("sec")
-    v1 = Meter(2)
-    v2 = Second(3)
-    v3 = v1 * v2
-    assert v3.value == v1.value * v2.value
-    assert Meter in v3.up
-    assert Second in v3.up
-    assert 2 == len(v3.up)
-    assert not v3.down
 
 
 def test_mul_than_div():
