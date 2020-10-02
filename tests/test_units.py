@@ -67,24 +67,6 @@ def test_sub_only_same_type():
         v1 - v2
 
 
-def test_add():
-    Meter = Unit("m")
-    v1 = Meter(2)
-    v2 = v1 + v1
-    assert v2.value == v1.value + v1.value
-    assert v2.up == v1.up
-    assert v2.down == v1.down
-
-
-def test_sub():
-    Meter = Unit("m")
-    v1 = Meter(2)
-    v2 = v1 - v1
-    assert v2.value == 0
-    assert v2.up == v1.up
-    assert v2.down == v1.down
-
-
 def test_replace_unit_fully():
     Meter = Unit("m")
     Second = Unit("sec")
