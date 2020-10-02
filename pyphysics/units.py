@@ -8,32 +8,53 @@ def is_number(a: Any):
 
 @total_ordering
 class UnitValue(SupportsFloat, SupportsInt, SupportsAbs, SupportsRound):
+    """Wrapper of float to has physics units as part of its type.
+    """
+
     def __init__(self, value: float, up: Sequence[str], down: Sequence[str]=None):
         self.value = float(value)
-        self.up = list(sorted(up))
-        self.down = list(sorted(down)) if down else []
+        up = list(sorted(up))
+        down = list(sorted(down)) if down else []
         i = 0
-        while i < len(self.down):
-            if self.down[i] in self.up:
-                self.up.remove(self.down[i])
-                self.down.remove(self.down[i])
+        while i < len(down):
+            current = down[i]
+            if current in up:
+                up.remove(current)
+                down.remove(current)
             else:
                 i += 1
+        self.up = tuple(self.up)
+        self.down = tuple(self.down)
 
-    def replace_unit(self, unit: 'UnitValue'):
+    def replace_unit(self, unit: 'Composite', power: Optional[int]=None):
+        """
+        Args:
+            power: If exists, replace unit with the power.
+        """
         new_up = list(self.up)
         new_down = list(self.down)
-        for up in unit.up:
-            if up in new_up:
-                new_up.remove(up)
-            else:
-                new_down += [up]
-        for down in unit.down:
-            if down in new_down:
-                new_down.remove(down)
-            else:
-                new_up += [down]
-        new_up += [unit]
+        for _ in range(new_up.count(unit)):
+            new_up.remove(unit)
+            new_up += unit.up
+            new_down += unit.down
+        for _ in range(new_down.count(unit)):
+            new_down.remove(unit)
+            new_down += unit.up
+            new_up += unit.down
+        return UnitValue(self.value, new_up, new_down)
+
+    def replace_to_unit(self, unit: 'Composite', power: Optional[int]=None):
+        """
+        Args:
+            power: If exists, replace unit with the power.
+        """
+        new_up = Counter(self.up)
+        new_down = Counter(self.down)
+
+        max_replace = max([new_up.count(elem) / count for elem, count in Counter(unit.up)] + [new_down.count(elem) / count for elem, count in Counter(unit.down)])
+        new_up += unit.down * max_replace
+        new_down += unit.up * max_replace
+
         return UnitValue(self.value, new_up, new_down)
 
     def __truediv__(self, other: 'UnitValue' or float or int):
@@ -179,6 +200,8 @@ class UnitValue(SupportsFloat, SupportsInt, SupportsAbs, SupportsRound):
 
 @total_ordering
 class Unit(Callable[[float], UnitValue], Hashable):
+    """A physics unit to create unit value.
+    """
     def __init__(self, signature: str):
         self.signature = signature
 
@@ -199,6 +222,8 @@ class Unit(Callable[[float], UnitValue], Hashable):
 
 
 class Composite(Unit):
+    """A physics unit that is bult from several basic units.
+    """
     def __init__(self, signature: str, up: Sequence[Unit], down: Sequence[Unit]):
         Unit.__init__(self, signature)
         self.up = up
