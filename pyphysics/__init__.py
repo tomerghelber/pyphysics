@@ -7,7 +7,7 @@ def is_number(a):
 
 
 @total_ordering
-class UnitValue(SupportsFloat, SupportsInt):
+class UnitValue(SupportsFloat, SupportsInt, SupportsAbs, SupportsRound, Hashable):
     def __init__(self, value: float, up: Sequence[str], down: Sequence[str]=None):
         self.value = float(value)
         self.up = list(sorted(up))
@@ -160,6 +160,9 @@ class UnitValue(SupportsFloat, SupportsInt):
     def __eq__(self, other):
         return self.__same_type(other) and self.value == other.value
 
+    def __hash__(self):
+        return hash((self.value, self.up, self.down))
+
     def __repr__(self):
         up = "*".join(map(lambda a: a.signature, self.up))
         down = "*".join(map(lambda a: a.signature, self.down))
@@ -175,7 +178,7 @@ class UnitValue(SupportsFloat, SupportsInt):
 
 
 @total_ordering
-class Unit(Callable[[float], UnitValue]):
+class Unit(Callable[[float], UnitValue], Hashable):
     def __init__(self, signature: str):
         self.signature = signature
 
@@ -188,6 +191,9 @@ class Unit(Callable[[float], UnitValue]):
     def __eq__(self, other):
         return isinstance(other, type(self)) and self.signature == other.signature
     
+    def __hash__(self):
+        return hash(self.signature)
+
     def __repr__(self) -> str:
         return "Unit<{}>".format(self.signature)
 
