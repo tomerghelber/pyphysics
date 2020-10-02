@@ -7,7 +7,7 @@ def is_number(a: Any):
 
 
 @total_ordering
-class UnitValue(SupportsFloat, SupportsInt, SupportsAbs, SupportsRound, Hashable):
+class UnitValue(SupportsFloat, SupportsInt, SupportsAbs, SupportsRound):
     def __init__(self, value: float, up: Sequence[str], down: Sequence[str]=None):
         self.value = float(value)
         self.up = list(sorted(up))
