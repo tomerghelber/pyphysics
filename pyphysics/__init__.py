@@ -3,7 +3,7 @@ from functools import total_ordering
 
 
 def is_number(a):
-    return isinstance(num, (int, float)
+    return isinstance(num, (int, float))
 
 
 @total_ordering
