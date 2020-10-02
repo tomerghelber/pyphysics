@@ -52,11 +52,9 @@ class UnitValue(SupportsFloat, SupportsInt, SupportsAbs, SupportsRound):
         new_down = list(self.down)
 
         if power is None:
-            max_replace = max([new_up.count(elem) // count for elem, count in Counter(unit.up).items()] + [new_down.count(elem) // count for elem, count in Counter(unit.down).items()])
-        else:
-            max_replace = power
-        new_up += unit.down * max_replace
-        new_down += unit.up * max_replace
+            power = max([new_up.count(elem) // count for elem, count in Counter(unit.up).items()] + [new_down.count(elem) // count for elem, count in Counter(unit.down).items()])
+        new_up += (unit.down + [unit]) * power
+        new_down += (unit.up + [unit]) * power
 
         return UnitValue(self.value, new_up, new_down)
 
