@@ -2,7 +2,7 @@ from typing import *
 from functools import total_ordering
 
 
-def is_number(a):
+def is_number(a: Any):
     return isinstance(a, (int, float))
 
 
@@ -20,7 +20,7 @@ class UnitValue(SupportsFloat, SupportsInt, SupportsAbs, SupportsRound, Hashable
             else:
                 i += 1
 
-    def replace_unit(self, unit):
+    def replace_unit(self, unit: 'UnitValue'):
         new_up = list(self.up)
         new_down = list(self.down)
         for up in unit.up:
@@ -36,7 +36,7 @@ class UnitValue(SupportsFloat, SupportsInt, SupportsAbs, SupportsRound, Hashable
         new_up += [unit]
         return UnitValue(self.value, new_up, new_down)
 
-    def __truediv__(self, other):
+    def __truediv__(self, other: 'UnitValue' or float or int):
         """
         Examples:
             >>> Meter = Unit("m")
@@ -74,7 +74,7 @@ class UnitValue(SupportsFloat, SupportsInt, SupportsAbs, SupportsRound, Hashable
             return UnitValue(self.value / other, self.up, self.down)
         return UnitValue(self.value / other.value, self.up + other.down, self.down + other.up)
 
-    def __mul__(self, other):
+    def __mul__(self, other: 'UnitValue' or float or int):
         """
         Examples:
             >>> Meter = Unit("m")
@@ -105,7 +105,7 @@ class UnitValue(SupportsFloat, SupportsInt, SupportsAbs, SupportsRound, Hashable
             return UnitValue(self.value * other, self.up, self.down)
         return UnitValue(self.value * other.value, self.up + other.up, self.down + other.down)
 
-    def __add__(self, other):
+    def __add__(self, other: 'UnitValue'):
         """
         Examples:
             >>> Meter = Unit("m")
@@ -122,7 +122,7 @@ class UnitValue(SupportsFloat, SupportsInt, SupportsAbs, SupportsRound, Hashable
             raise TypeError("Not the same type")
         return UnitValue(self.value + other.value, self.up, self.down)
 
-    def __sub__(self, other):
+    def __sub__(self, other: 'UnitValue'):
         """
         Examples:
             >>> Meter = Unit("m")
@@ -145,25 +145,25 @@ class UnitValue(SupportsFloat, SupportsInt, SupportsAbs, SupportsRound, Hashable
     def __float__(self) -> float:
         return float(self.value)
 
-    def __round__(self):
+    def __round__(self) -> 'UnitValue':
         return UnitValue(round(self.value), self.up, self.down)
 
-    def __abs__(self):
+    def __abs__(self) -> 'UnitValue':
         return UnitValue(abs(self.value), self.up, self.down)
 
-    def __same_type(self, other):
+    def __same_type(self, other: Any) -> bool:
         return isinstance(other, type(self)) and self.up == other.up and self.down == other.down
 
-    def __lt__(self, other):
+    def __lt__(self, other: Any) -> bool:
         return self.__same_type(other) and self.value < other.value
 
-    def __eq__(self, other):
+    def __eq__(self, other: Any) -> bool:
         return self.__same_type(other) and self.value == other.value
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash((self.value, self.up, self.down))
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         up = "*".join(map(lambda a: a.signature, self.up))
         down = "*".join(map(lambda a: a.signature, self.down))
         if down:
@@ -185,13 +185,13 @@ class Unit(Callable[[float], UnitValue], Hashable):
     def __call__(self, value: float) -> UnitValue:
         return UnitValue(value, [self])
 
-    def __lt__(self, other):
+    def __lt__(self, other: Any) -> bool:
         return isinstance(other, type(self)) and self.signature < other.signature
 
-    def __eq__(self, other):
+    def __eq__(self, other: Any) -> bool:
         return isinstance(other, type(self)) and self.signature == other.signature
     
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.signature)
 
     def __repr__(self) -> str:
@@ -199,7 +199,7 @@ class Unit(Callable[[float], UnitValue], Hashable):
 
 
 class Composite(Unit):
-    def __init__(self, signature, up, down):
+    def __init__(self, signature: str, up: Sequence[Unit], down: Sequence[Unit]):
         Unit.__init__(self, signature)
         self.up = up
         self.down = down
