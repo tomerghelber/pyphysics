@@ -67,14 +67,14 @@ def test_sub_only_same_type():
         v1 - v2
 
 
-def test_replace_unit_fully():
+def test_replace_to_unit_fully():
     Meter = Unit("m")
     Second = Unit("sec")
     Newton = Composite("N", [Meter], [Second, Second])
     v1 = Meter(2)
     v2 = Second(3)
     v3 = v1 / (v2 * v2)
-    v4 = v3.replace_unit(Newton)
+    v4 = v3.replace_to_unit(Newton)
     assert v4.value == v3.value
     assert Newton in v4.up
     assert Second not in v4.down
@@ -83,14 +83,14 @@ def test_replace_unit_fully():
     assert 0 == len(v4.down)
 
 
-def test_replace_unit_partial():
+def test_replace_to_unit_partial():
     Meter = Unit("m")
     Second = Unit("sec")
     Newton = Composite("N", [Meter], [Second, Second])
     v1 = Meter(2)
     v2 = Second(3)
     v3 = v1 / v2
-    v4 = v3.replace_unit(Newton)
+    v4 = v3.replace_to_unit(Newton)
     assert v4.value == v3.value
     assert Newton in v4.up
     assert Second in v4.up
