@@ -34,7 +34,7 @@ class UnitValue(SupportsFloat, SupportsInt):
 
     def __truediv__(self, other):
         """
-        Example:
+        Examples:
             >>> Meter = Unit("m")
             >>> Second = Unit("sec")
             >>> v1 = Meter(2)
@@ -49,6 +49,19 @@ class UnitValue(SupportsFloat, SupportsInt):
         return UnitValue(self.value / other.value, self.up + other.down, self.down + other.up)
 
     def __mul__(self, other):
+        """
+        Examples:
+            >>> Meter = Unit("m")
+            >>> Second = Unit("sec")
+            >>> v1 = Meter(2)
+            >>> v2 = Second(3)
+            >>> v3 = v1 * v2
+            >>> assert v3.value == v1.value * v2.value
+            >>> assert Meter in v3.up
+            >>> assert Second in v3.up
+            >>> assert 2 == len(v3.up)
+            >>> assert not v3.down
+        """
         return UnitValue(self.value * other.value, self.up + other.up, self.down + other.down)
 
     def __add__(self, other):
