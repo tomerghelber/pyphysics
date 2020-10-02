@@ -54,11 +54,11 @@ class UnitValue(SupportsFloat, SupportsInt, SupportsAbs, SupportsRound):
             power = max(up_counting + down_counting, key=abs)
 
         if power > 0:
-            new_up = self.up + (unit.down + [unit]) * power
-            new_down = self.down + unit.up * power
+            new_up = ([unit] + unit.down) * power + self.up
+            new_down = list(self.down) + unit.up * power
         else:
-            new_up += unit.up * power
-            new_down += (unit.down + [unit]) * power
+            new_up += list(self.down) + unit.up * power
+            new_down += ([unit] + unit.down) * power + self.up
 
         return UnitValue(self.value, new_up, new_down)
 
@@ -230,6 +230,8 @@ class Composite(Unit):
     """A physics unit that is bult from several basic units.
     """
     def __init__(self, signature: str, up: Sequence[Unit], down: Sequence[Unit]):
+        if any(u in down for u in up):
+            raise TypeError("up should be different than down")
         Unit.__init__(self, signature)
-        self.up = up
-        self.down = down
+        self.up = tuple(up)
+        self.down = tuple(down)
